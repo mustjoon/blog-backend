@@ -1,5 +1,9 @@
 "use strict";
 const client = require("./helpers/contentful-client");
+const {
+  handleBlogItem,
+  handleBlogList,
+} = require("./helpers/contentful-handlers");
 
 const getAllBlogs = async (event) => {
   try {
@@ -7,7 +11,7 @@ const getAllBlogs = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(data),
+      body: JSON.stringify(handleBlogList(data)),
     };
   } catch (err) {
     return {
@@ -17,7 +21,6 @@ const getAllBlogs = async (event) => {
 };
 
 const getSingleBlog = async (event) => {
-  console.log(process.env.custom);
   const blogId = event.pathParameters?.id;
 
   if (!blogId) {
@@ -31,7 +34,7 @@ const getSingleBlog = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(data),
+      body: JSON.stringify(handleBlogItem(data)),
     };
   } catch (err) {
     return {
