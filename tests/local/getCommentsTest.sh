@@ -1,0 +1,1 @@
+serverless invoke local --function getCommentsByBlog --path ./tests/local/data/getComments.json

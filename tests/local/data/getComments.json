@@ -1,0 +1,8 @@
+{
+  "resource": "/",
+  "path": "/",
+  "httpMethod": "GET",
+  "queryStringParameters": {
+    "blogId": "3YwgvRV6kAlgUQsIH2MSMG"
+  }
+}

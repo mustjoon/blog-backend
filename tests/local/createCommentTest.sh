@@ -1,0 +1,1 @@
+serverless invoke local --function createComment --path ./tests/local/data/createComment.json
