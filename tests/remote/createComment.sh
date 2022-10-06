@@ -1,0 +1,1 @@
+curl -s -X POST -d '{"comment":"Amazing!","blogId":"3YwgvRV6kAlgUQsIH2MSMG"}' --url https://798xqz1nzk.execute-api.us-east-1.amazonaws.com/

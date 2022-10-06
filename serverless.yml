@@ -7,7 +7,7 @@ provider:
   name: aws
   runtime: nodejs14.x
   environment:
-    DYNAMODB_CUSTOMER_TABLE: ${self:service}-customerTable-${sls:stage}
+    DYNAMODB_COMMENT_TABLE: ${self:service}-customerTable-${sls:stage}
     CONTENTFUL_ACCESS_TOKEN: ${ssm:/aws/reference/secretsmanager/contentful_access_token}
     CONTENTFUL_SPACE_KEY: ${ssm:/aws/reference/secretsmanager/contentful_space_key}
   iam:

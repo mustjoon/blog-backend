@@ -1,0 +1,1 @@
+curl -s https://798xqz1nzk.execute-api.us-east-1.amazonaws.com/?blogId=3YwgvRV6kAlgUQsIH2MSMG

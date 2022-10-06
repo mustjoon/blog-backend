@@ -8,7 +8,7 @@ const createComment = async (event) => {
 
   // ToDo: research if these are needed to validate etc or if dynamo does some black magic
   const putParams = {
-    TableName: process.env.DYNAMODB_CUSTOMER_TABLE,
+    TableName: process.env.DYNAMODB_COMMENT_TABLE,
     Item: {
       primary_key: uuidv4(),
       comment: body.comment,
@@ -31,34 +31,51 @@ const getCommentsByBlog = async (event) => {
       statusCode: 422,
     };
   }
-  // ToDo: research if these are needed to validate etc or if dynamo does some black magic
-  const scanParams = {
-    TableName: process.env.DYNAMODB_CUSTOMER_TABLE,
-    ExpressionAttributeValues: {
-      ":s": { S: blogId },
-    },
-    FilterExpression: "blogId = :s",
-  };
 
-  const dynamodb = new AWS.DynamoDB.DocumentClient();
-  const result = await dynamodb.scan(scanParams).promise();
+  try {
+    // ToDo: research if these are needed to validate etc or if dynamo does some black magic
+    const scanParams = {
+      TableName: process.env.DYNAMODB_COMMENT_TABLE,
+      FilterExpression: "#blog = :blog",
+      ExpressionAttributeNames: {
+        "#blog": "blog_id",
+      },
+      ExpressionAttributeValues: {
+        ":blog": blogId,
+      },
+    };
 
-  if (result.Count === 0) {
-    return [];
-  }
+    const dynamodb = new AWS.DynamoDB.DocumentClient();
+    const result = await dynamodb.scan(scanParams).promise();
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      total: result.Count,
-      items: await result.Items.map((comment) => {
-        return {
-          comment: comment.customer,
-          blog_id: comment.blog_id,
-        };
+    if (result.Count === 0) {
+      return {
+        statusCode: 200,
+        body: {
+          total: 0,
+          items: [],
+        },
+      };
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        total: result.Count,
+        items: await result.Items.map((comment) => {
+          return {
+            comment: comment.comment,
+            blog_id: comment.blog_id,
+          };
+        }),
       }),
-    }),
-  };
+    };
+  } catch (err) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify(err),
+    };
+  }
 };
 
 module.exports = {
